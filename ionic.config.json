@@ -1,0 +1,7 @@
+{
+  "name": "IonicChatAppC2",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
