@@ -1,0 +1,473 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input {
+  outline: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.login__container {
+  align-items: center;
+  display: grid;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+  padding: 0 0.75rem;
+}
+
+.login__container > div {
+  width: 100%;
+}
+
+.login__title {
+  text-align: center;
+  padding: 0.75rem;
+}
+
+.login__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: transparent !important;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  outline: none !important;
+  padding: 0.875rem 1rem;
+  width: 100%;
+  width: 100%;
+}
+
+.login__submit-btn {
+  background-color: #3b82f6;
+  border-radius: 0.5rem;
+  border: 0;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+  padding: 1rem;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.login__register-label {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.75rem 0;
+  text-align: center;
+}
+
+.login__register-label:hover {
+  cursor: pointer;
+}
+
+.signup__container {
+  align-items: center;
+  display: grid;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+  padding: 0 0.75rem;
+}
+
+.signup__container > div {
+  width: 100%;
+}
+
+.signup__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: transparent !important;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  outline: none !important;
+  padding: 0.875rem 1rem;
+  width: 100%;
+  width: 100%;
+}
+
+.signup__submit-btn {
+  background-color: #3b82f6;
+  border-radius: 0.5rem;
+  border: 0;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+  padding: 1rem;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.creategroup__container {
+  align-items: center;
+  display: grid;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+  padding: 0 0.75rem;
+}
+
+.creategroup__container > div {
+  width: 100%;
+}
+
+.creategroup__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: transparent !important;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  outline: none !important;
+  padding: 0.875rem 1rem;
+  width: 100%;
+  width: 100%;
+}
+
+.creategroup__submit-btn {
+  background-color: #3b82f6;
+  border-radius: 0.5rem;
+  border: 0;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+  padding: 1rem;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.home__container {
+  padding: 0.5rem;
+}
+
+.home__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #000;
+  color: #000;
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.home__actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 0.5rem;
+}
+
+.home__actions div {
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.home__actions div:hover {
+  cursor: pointer;
+}
+
+.home__action--active {
+  background-color: #60a5fa;
+  border-radius: 0.5rem;
+  color: #fff;
+}
+
+.home__data-item {
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  padding: 0.75rem 0;
+}
+
+.home__data-item:hover {
+  cursor: pointer;
+}
+
+.home__data-item img {
+  height: 2rem;
+  margin-right: 0.75rem;
+  width: 2rem;
+}
+
+.home__unread-count-message {
+  align-items: center;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  color: #fff;
+  display: grid;
+  height: 1.5rem;
+  justify-content: center;
+  width: 1.5rem;
+}
+
+.managegroup__container {
+  padding: 0 0.75rem;
+}
+
+.managegroup__data-item {
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  padding: 0.75rem 0;
+}
+
+.managegroup__data-item:hover {
+  cursor: pointer;
+}
+
+.managegroup__data-item span {
+  padding-left: 0.75rem;
+}
+
+.addgroupmembers__container {
+  padding: 0.5rem;
+}
+
+.addgroupmembers__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #000;
+  color: #000;
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.addgroupmembers__data-item {
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  padding: 0.75rem 0;
+}
+
+.addgroupmembers__data-item:hover {
+  cursor: pointer;
+}
+
+.addgroupmembers__data-item img {
+  height: 2rem;
+  margin-right: 0.75rem;
+  width: 2rem;
+}
+
+.removegroupmembers__container {
+  padding: 0.5rem;
+}
+
+.removegroupmembers__container input {
+  border-radius: 0.5rem;
+  border: 1px solid #000;
+  color: #000;
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.removegroupmembers__data-item {
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  padding: 0.75rem 0;
+}
+
+.removegroupmembers__data-item:hover {
+  cursor: pointer;
+}
+
+.removegroupmembers__data-item img {
+  height: 2rem;
+  margin-right: 0.75rem;
+  width: 2rem;
+}
+
+.chatbox__title {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+}
+
+.chatbox__title-avatar-container {
+  position: relative;
+}
+
+.chatbox__title img {
+  width: 2rem;
+  height: 2rem;
+}
+
+.chatbox__title-status {
+  background: #ccc;
+  border-radius: 50%;
+  bottom: 5px;
+  height: 0.5rem;
+  position: absolute;
+  right: 0.25rem;
+  width: 0.5rem;
+}
+
+.chatbox__title-status--online {
+  background: green;
+}
+
+.chatbox__title-status--offline {
+  background: red;
+}
+
+.chatbox__input {
+  bottom: 0;
+  left: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding: 0.75rem;
+  position: fixed;
+  right: 0;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+.chatbox__input div {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+}
+
+.chatbox__input span {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.chatbox__input input {
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  color: #6b7280;
+  font-size: 0.9375rem;
+  margin-left: 0.5rem;
+  outline: none;
+  padding-left: 1.25rem;
+  padding: 0.65rem 0.25rem 0.65rem 1.25rem;
+}
+
+.chatbox__file-chooser {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.message__container {
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 1rem 0 10rem 0;
+}
+
+.message__image {
+  height: 160px;
+  object-fit: cover;
+  width: 160px;
+}
+
+.message__video {
+  width: 160px;
+  height: 160px;
+}
+
+.message__left {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: max-content max-content;
+  padding: 0.25rem 0.75rem;
+}
+
+.message__right {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: max-content max-content;
+  justify-content: right;
+  padding: 0.25rem 0.75rem;
+}
+
+.message__avatar img {
+  border-radius: 9999px;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.message__content {
+  border-radius: 0.5rem;
+  color: #fff;
+  max-width: 15.125rem;
+  padding: 0.5rem;
+}
+
+.message__content--left {
+  background-color: #3b82f6;
+}
+
+.message__content--right {
+  background-color: #d1d5db;
+}
+
+.message__tick-container {
+  display: grid;
+  justify-content: right;
+  padding: 0.25rem 0;
+}
+
+.message__tick {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.calling__container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.calling__container img {
+  height: 7.5rem;
+  margin: 2rem;
+  width: 7.5rem;
+}
+
+
+.calling__accept-btn {
+  background: #3B82F6;
+  border-radius: 0.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  text-align: center;
+  width: 10rem;
+}
+
+.calling__accept-btn:hover {
+  cursor: pointer;
+}
+
+.calling__cancel-btn {
+  background: #ef4444;
+  border-radius: 0.5rem;
+  color: #fff;
+  padding: 0.75rem;
+  text-align: center;
+  width: 10rem;
+}
+
+.calling__cancel-btn:hover {
+  cursor: pointer;
+}

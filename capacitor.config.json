@@ -1,0 +1,13 @@
+{
+  "appId": "com.example.app",
+  "appName": "IonicChatAppC2",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
