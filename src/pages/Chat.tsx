@@ -83,8 +83,8 @@ const Chat: React.FC = () => {
     })
   }
 
-  const initUserOnlineStatus = (status: any) => {
-    if (!status) {
+  const initUserOnlineStatus = (status: any) => { 
+    if (!status) { 
       setIsUserOnline(null);
       return;
     }
@@ -211,15 +211,7 @@ const Chat: React.FC = () => {
       for (const message of messages) {
         if (message.sender.uid !== user.uid) {
           const receiverId = getReceiverIdForMarkingAsRead(message);
-          console.log(message);
-          console.log(receiverId);
-          cometChat.markAsRead(message).then(
-            () => {
-              console.log("mark as read success.");
-            }, (error: any) => {
-              console.log("An error occurred when marking the message as read.", error);
-            }
-          );
+          cometChat.markAsRead(message.id, receiverId, message.receiverType, message.sender.uid).then();
         }
       }
     }
