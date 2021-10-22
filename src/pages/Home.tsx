@@ -1,14 +1,16 @@
-import React, { useRef, useContext, useState, useEffect } from 'react';
+import React, { useRef, useContext, useState, useEffect, useCallback } from 'react';
 
 import { IonToolbar, IonTitle, IonHeader, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { add, exit } from 'ionicons/icons';
+import { add, exit, text } from 'ionicons/icons';
 
 import { useHistory } from 'react-router';
 import { v4 as uuidv4 } from "uuid";
 
 import Context from '../context';
+import { cachedDataVersionTag } from 'v8';
 
 const Home: React.FC = () => {
+  const listenerID = useRef(uuidv4());
 
   const history = useHistory();
 
@@ -21,12 +23,63 @@ const Home: React.FC = () => {
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
+    if (cometChat) {
+      listenForMessages();
+    }
+    return () => {
+      if (cometChat) {
+        cometChat.removeMessageListener(listenerID);
+      }
+      setData(null);
+    }
+  }, [cometChat, selectedType]);
+
+  useEffect(() => {
     if (selectedType === 0) {
       searchUsers();
     } else {
       searchGroups();
     }
+    return () => {
+      setData(null);
+    }
   }, [cometChat, selectedType, keyword]);
+
+  const updateUnreadData = (data: any) => {
+    const updatedData = { ...data };
+    const updatedUnreadCount = data.unreadCount ? data.unreadCount + 1 : 1;
+    updatedData.unreadCount = updatedUnreadCount;
+    return updatedData;
+  };
+
+  const updateUnreadCountMessage = (id: any) => {
+    if (id) {
+      setData((prevData: any) => {
+        return prevData.map((data: any) => {
+          if (selectedType === 0 && data.uid === id) {
+            return updateUnreadData(data);
+          } else if (selectedType === 1 && data.guid === id) {
+            return updateUnreadData(data);
+          }
+          return data;
+        });
+      });
+    }
+  }
+
+  const listenForMessages = useCallback(() => {
+    cometChat.addMessageListener(
+      listenerID,
+      new cometChat.MessageListener({
+        onTextMessageReceived: (textMessage: any) => {
+          console.log("Text message received successfully", textMessage);
+          if (textMessage) {
+            updateUnreadCountMessage(selectedType === 0 ? textMessage.sender.uid : selectedType === 1 ? textMessage.receiverId : null);
+          }
+        }
+      })
+    );
+  }, [cometChat, selectedType]);
 
   const getUnreadMessageCountForAllUsers = (userList: any) => {
     cometChat.getUnreadMessageCountForAllUsers().then((array: any) => {
@@ -97,7 +150,7 @@ const Home: React.FC = () => {
   };
 
   const updateSelectedType = (selectedType: any) => () => {
-    setSelectedType(() => selectedType);
+    setSelectedType(selectedType);
   };
 
   const joinGroup = (item: any) => {

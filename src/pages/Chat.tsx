@@ -31,6 +31,7 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (selectedConversation) {
+      initUserOnlineStatus(selectedConversation.status);
       // get list of messages.
       getMessages();
       // listen for messages.
@@ -42,7 +43,7 @@ const Chat: React.FC = () => {
     }
     return () => {
       if (selectedConversation) {
-        cometChat.removeMessageListener(selectedConversation.id);
+        cometChat.removeMessageListener(selectedConversation.uid);
         if (selectedConversation.contactType === 0) {
           cometChat.removeUserListener(userOnlineListenerId);
         }
@@ -80,6 +81,18 @@ const Chat: React.FC = () => {
         return message;
       });
     })
+  }
+
+  const initUserOnlineStatus = (status: any) => {
+    if (!status) {
+      setIsUserOnline(null);
+      return;
+    }
+    if (status === 'online') {
+      setIsUserOnline(true);
+      return;
+    }
+    setIsUserOnline(false);
   }
 
   const updateDeliveredAt = (messageReceipt: any) => {
@@ -198,7 +211,15 @@ const Chat: React.FC = () => {
       for (const message of messages) {
         if (message.sender.uid !== user.uid) {
           const receiverId = getReceiverIdForMarkingAsRead(message);
-          cometChat.markAsRead(message.id, receiverId, message.receiverType, message.sender.uid);
+          console.log(message);
+          console.log(receiverId);
+          cometChat.markAsRead(message).then(
+            () => {
+              console.log("mark as read success.");
+            }, (error: any) => {
+              console.log("An error occurred when marking the message as read.", error);
+            }
+          );
         }
       }
     }
@@ -275,10 +296,12 @@ const Chat: React.FC = () => {
     );
   };
 
-  const sendMessage = (e: any) => {
-    if (e.key === 'Enter') {
+  const sendMessage = (e: any, shouldSendMessage = false) => {
+    if (e.key === 'Enter' || shouldSendMessage) {
       // get the value from input.
       const message = messageRef.current.value;
+      // reset input box.
+      messageRef.current.value = '';
       if (message) {
         // call cometchat api to send the message.
         const textMessage = new cometChat.TextMessage(
@@ -289,8 +312,6 @@ const Chat: React.FC = () => {
 
         cometChat.sendMessage(textMessage).then(
           (msg: any) => {
-            // reset input box.
-            messageRef.current.value = '';
             // append the new message to "messages" state.
             setMessages((prevMessages: any) => [...prevMessages, {
               id: uuidv4(),
@@ -459,7 +480,7 @@ const Chat: React.FC = () => {
           <div>
             <img src={imageIcon} alt='file-chooser' className='chatbox__file-chooser' onClick={toggleActionsSheet(true)} />
             <input type="url" placeholder="Message..." onKeyDown={sendMessage} ref={messageRef} onChange={onInputChanged} onBlur={onInputBlured} />
-            <svg fill="#2563EB" className="crt8y2ji" width="20px" height="20px" viewBox="0 0 24 24"><path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 C22.8132856,11.0605983 22.3423792,10.4322088 21.714504,10.118014 L4.13399899,1.16346272 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.8376543,3.0486314 1.15159189,3.99121575 L3.03521743,10.4322088 C3.03521743,10.5893061 3.34915502,10.7464035 3.50612381,10.7464035 L16.6915026,11.5318905 C16.6915026,11.5318905 17.1624089,11.5318905 17.1624089,12.0031827 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z" fillRule="evenodd" stroke="none"></path></svg>
+            <svg onClick={(e) => sendMessage(e, true)} fill="#2563EB" className="crt8y2ji" width="20px" height="20px" viewBox="0 0 24 24"><path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.41,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 C22.8132856,11.0605983 22.3423792,10.4322088 21.714504,10.118014 L4.13399899,1.16346272 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.8376543,3.0486314 1.15159189,3.99121575 L3.03521743,10.4322088 C3.03521743,10.5893061 3.34915502,10.7464035 3.50612381,10.7464035 L16.6915026,11.5318905 C16.6915026,11.5318905 17.1624089,11.5318905 17.1624089,12.0031827 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z" fillRule="evenodd" stroke="none"></path></svg>
           </div>
         </div>
       </div>

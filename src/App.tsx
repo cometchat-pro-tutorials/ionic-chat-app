@@ -233,7 +233,6 @@ const App: React.FC<any> = () => {
   };
 
   const cancelCall = () => {
-    console.log('cancelCall was called');
     const status = cometChat.CALL_STATUS.CANCELLED;
     rejectCall(status, call);
   };
