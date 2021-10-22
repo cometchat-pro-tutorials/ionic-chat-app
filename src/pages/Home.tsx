@@ -7,7 +7,6 @@ import { useHistory } from 'react-router';
 import { v4 as uuidv4 } from "uuid";
 
 import Context from '../context';
-import { cachedDataVersionTag } from 'v8';
 
 const Home: React.FC = () => {
   const listenerID = useRef(uuidv4());
