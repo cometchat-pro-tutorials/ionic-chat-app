@@ -83,8 +83,8 @@ const Chat: React.FC = () => {
     })
   }
 
-  const initUserOnlineStatus = (status: any) => { 
-    if (!status) { 
+  const initUserOnlineStatus = (status: any) => {
+    if (!status) {
       setIsUserOnline(null);
       return;
     }
@@ -208,12 +208,10 @@ const Chat: React.FC = () => {
 
   const sendReadBulkReceipts = (messages: any) => {
     if (messages && messages.length !== 0) {
-      for (const message of messages) {
-        if (message.sender.uid !== user.uid) {
-          const receiverId = getReceiverIdForMarkingAsRead(message);
-          cometChat.markAsRead(message.id, receiverId, message.receiverType, message.sender.uid).then();
-        }
-      }
+      // get the last message.
+      const lastMessage = messages[messages.length - 1];
+      const receiverId = getReceiverIdForMarkingAsRead(lastMessage);
+      cometChat.markAsRead(lastMessage.id, receiverId, lastMessage.receiverType, lastMessage.sender.uid).then();
     }
   };
 

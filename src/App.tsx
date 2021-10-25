@@ -41,6 +41,7 @@ import './theme/App.css';
 
 const App: React.FC<any> = () => {
   const callListenerId = useRef(uuidv4());
+  const groupListenerId = useRef(uuidv4());
 
   const [isLoading, setIsLoading] = useState(false);
   const [cometChat, setCometChat] = useState<any>(null);
@@ -61,13 +62,17 @@ const App: React.FC<any> = () => {
       setCall(null);
       setCallSettings(null);
       setIsSomeoneCalling(false);
-      cometChat.removeCallListener(callListenerId);
+      if (cometChat) {
+        cometChat.removeCallListener(callListenerId);
+        cometChat.removeGroupListener(groupListenerId);
+      }
     }
   }, []);
 
   useEffect(() => {
     if (cometChat) {
       listenForCall();
+      listenForGroupChanges();
     }
   }, [cometChat]);
 
@@ -84,6 +89,20 @@ const App: React.FC<any> = () => {
       cometChat.startCall(callSettings);
     }
   }, [callSettings]);
+
+  const listenForGroupChanges = () => {
+    cometChat.addGroupListener(
+      groupListenerId,
+      new cometChat.GroupListener({
+        onMemberAddedToGroup: (message: any, userAdded: any, userAddedBy: any, userAddedIn: any) => {
+          alert(`${userAdded.name} was added to ${userAddedIn.name} by ${userAddedBy.name}`);
+        },
+        onGroupMemberKicked: (message: any, kickedUser: any, kickedBy: any, kickedFrom: any) => {
+          alert(`${kickedUser.name} was removed from ${kickedFrom.name}`);
+        },
+      })
+    );
+  };
 
   const rejectCall = (status: any, call: any) => {
     if (status && call) {
@@ -268,7 +287,7 @@ const App: React.FC<any> = () => {
 
   const getPermissions = () => {
     AndroidPermissions.requestPermissions([AndroidPermissions.PERMISSION.CAMERA, AndroidPermissions.PERMISSION.RECORD_AUDIO, AndroidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, AndroidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
-  };  
+  };
 
   if (callType && selectedConversation && !callSettings) {
     return (

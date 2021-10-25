@@ -49,18 +49,12 @@ const Message: React.FC<any> = (props) => {
             {selectedConversation && selectedConversation.contactType === 0 && selectedConversation.uid !== senderId && renderTicks(deliveredAt, readAt)}
           </div>
         </div>
-        <div className="message__avatar">
-          <img src={avatar} />
-        </div>
       </div>
     );
   }
 
   return (
     <div className="message__left">
-      <div className="message__avatar">
-        <img src={avatar} />
-      </div>
       <div className="message__content message__content--left">
         {renderMessageContent(message, messageType)}
       </div>

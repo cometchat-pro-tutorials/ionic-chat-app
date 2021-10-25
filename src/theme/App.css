@@ -471,3 +471,11 @@ input {
 .calling__cancel-btn:hover {
   cursor: pointer;
 }
+
+ion-icon {
+  color: #3b82f6;
+}
+
+ion-back-button {
+  color: #3b82f6;
+}
