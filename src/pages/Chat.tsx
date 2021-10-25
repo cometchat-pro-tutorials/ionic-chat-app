@@ -95,9 +95,6 @@ const Chat: React.FC = () => {
     setIsUserOnline(false);
   }
 
-  const updateDeliveredAt = (messageReceipt: any) => {
-  }
-
   const listenForMessages = () => {
     cometChat.addMessageListener(
       selectedConversation.uid,
@@ -136,9 +133,6 @@ const Chat: React.FC = () => {
           typingRef.current.classList.add('hide');
         },
         onMessagesDelivered: (messageReceipt: any) => {
-          if (selectedConversation.contactType === 0) {
-            updateDeliveredAt(messageReceipt);
-          }
         },
         onMessagesRead: (messageReceipt: any) => {
           if (selectedConversation.contactType === 0) {
