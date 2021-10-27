@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { IonToolbar, IonTitle, IonHeader, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/react';
-import { trash, addCircle, removeCircle } from 'ionicons/icons'
+import { trash, addCircle, removeCircle, exit } from 'ionicons/icons'
 import { useHistory } from 'react-router';
 
 import Context from '../context';
@@ -10,7 +10,7 @@ const ManageGroup: React.FC = () => {
 
   const history = useHistory();
 
-  const { cometChat, setIsLoading, selectedConversation } = useContext(Context);
+  const { user, cometChat, setIsLoading, selectedConversation } = useContext(Context);
 
   const handleDeleteGroup = () => {
     if (selectedConversation && selectedConversation.name && selectedConversation.guid) {
@@ -48,6 +48,27 @@ const ManageGroup: React.FC = () => {
     history.push('/remove-group-members');
   };
 
+  const handleLeaveGroup = () => {
+    if (selectedConversation && selectedConversation.guid && selectedConversation.name) {
+      setIsLoading(true);
+      cometChat.leaveGroup(selectedConversation.guid).then(
+        (hasLeft: any) => {
+          setIsLoading(false);
+          alert(`${selectedConversation.name} has left the group ${selectedConversation.name}`);
+          history.push('/');
+        }, (error: any) => {
+        }
+      );
+    }
+  };  
+
+  const leaveGroup = () => {
+    const shouldLeaveGroup = window.confirm(`Do you want to leave group ${selectedConversation.name}`);
+    if (shouldLeaveGroup) {
+      handleLeaveGroup();
+    }
+  };
+
   return (
     <>
       <IonHeader>
@@ -67,10 +88,14 @@ const ManageGroup: React.FC = () => {
           <IonIcon slot="icon-only" icon={addCircle} />
           <span>Add Members</span>
         </div>
-        <div className='managegroup__data-item' onClick={goToRemoveGroupMembers}>
+        {user && selectedConversation && user.uid && selectedConversation.owner && user.uid === selectedConversation.owner && <div className='managegroup__data-item' onClick={goToRemoveGroupMembers}>
           <IonIcon slot="icon-only" icon={removeCircle} />
           <span>Remove Members</span>
-        </div>
+        </div>}
+        {user && selectedConversation && user.uid && selectedConversation.owner && user.uid !== selectedConversation.owner && <div className='managegroup__data-item' onClick={leaveGroup}>
+          <IonIcon slot="icon-only" icon={exit} />
+          <span>Leave Group</span>
+        </div>}
       </div>
     </>
   );

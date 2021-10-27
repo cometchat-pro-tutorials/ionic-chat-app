@@ -10,7 +10,7 @@ const RemoveGroupMembers: React.FC = () => {
 
   const history = useHistory();
 
-  const { cometChat, setIsLoading, selectedConversation } = useContext(Context);
+  const { user, cometChat, setIsLoading, selectedConversation } = useContext(Context);
 
   const [keyword, setKeyword] = useState<any>('');
   // data that will be shown on the list, data could be the list of users, or the list of groups.
@@ -20,6 +20,13 @@ const RemoveGroupMembers: React.FC = () => {
     searchGroupMembers();
   }, [cometChat, keyword]);
 
+  const transformGroupMembers = (groupMembers: any) => {
+    if (groupMembers && groupMembers.length !== 0) {
+      return groupMembers.filter((member: any) => member && member.uid !== user.uid);
+    }
+    return groupMembers;
+  };
+
   const searchGroupMembers = () => {
     const GUID = selectedConversation.guid;
     const limit = 30;
@@ -28,7 +35,7 @@ const RemoveGroupMembers: React.FC = () => {
     const groupMemberRequest = keyword ? groupMemberRequestBuilder.setSearchKeyword(keyword).build() : groupMemberRequestBuilder.build();
     groupMemberRequest.fetchNext().then(
       (groupMembers: any) => {
-        setData(() => groupMembers);
+        setData(() => transformGroupMembers(groupMembers));
       },
       (error: any) => {
       }

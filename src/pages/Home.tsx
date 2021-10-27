@@ -1,7 +1,7 @@
 import React, { useRef, useContext, useState, useEffect, useCallback } from 'react';
 
 import { IonToolbar, IonTitle, IonHeader, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { add, exit, text } from 'ionicons/icons';
+import { add, exit } from 'ionicons/icons';
 
 import { useHistory } from 'react-router';
 import { v4 as uuidv4 } from "uuid";
@@ -17,9 +17,13 @@ const Home: React.FC = () => {
 
   const [keyword, setKeyword] = useState<any>('');
   // 0 is user, 1 is group.
-  const [selectedType, setSelectedType] = useState<any>(0);
+  const [selectedType, setSelectedType] = useState<any>();
   // data that will be shown on the list, data could be the list of users, or the list of groups.
   const [data, setData] = useState<any>([]);
+
+  useEffect(() => {
+    initSelectedType();
+  }, []);
 
   useEffect(() => {
     if (cometChat) {
@@ -44,6 +48,15 @@ const Home: React.FC = () => {
     }
   }, [cometChat, selectedType, keyword]);
 
+  const initSelectedType = () => {
+    const prevSelectedType = localStorage.getItem('selectedType');
+    if (prevSelectedType) {
+      setSelectedType(() => +prevSelectedType);
+    } else {
+      setSelectedType(0);
+    }
+  };
+
   const updateUnreadData = (data: any) => {
     const updatedData = { ...data };
     const updatedUnreadCount = data.unreadCount ? data.unreadCount + 1 : 1;
@@ -66,14 +79,33 @@ const Home: React.FC = () => {
     }
   }
 
+  const getUnreadUpdatedId = (textMessage: any) => {
+    const receiverType = textMessage.receiverType;
+    if (receiverType === 'group') {
+      return textMessage.receiverId;
+    } else if (receiverType === 'user') {
+      return textMessage.sender.id; 
+    }
+    return null;
+  };
+
+  const markAsDelivered = (textMessage: any) => {
+    if (textMessage) {
+      cometChat.markAsDelivered(textMessage);
+    }
+  };
+
   const listenForMessages = useCallback(() => {
     cometChat.addMessageListener(
       listenerID,
       new cometChat.MessageListener({
         onTextMessageReceived: (textMessage: any) => {
-          console.log("Text message received successfully", textMessage);
           if (textMessage) {
-            updateUnreadCountMessage(selectedType === 0 ? textMessage.sender.uid : selectedType === 1 ? textMessage.receiverId : null);
+            markAsDelivered(textMessage);
+            const updatedId = getUnreadUpdatedId(textMessage);
+            if (updatedId) {
+              updateUnreadCountMessage(updatedId);
+            }
           }
         }
       })
@@ -149,6 +181,7 @@ const Home: React.FC = () => {
   };
 
   const updateSelectedType = (selectedType: any) => () => {
+    localStorage.setItem('selectedType', String(selectedType));
     setSelectedType(selectedType);
   };
 
@@ -192,6 +225,7 @@ const Home: React.FC = () => {
           setUser(null);
           setSelectedConversation(null);
           localStorage.removeItem('auth');
+          localStorage.removeItem('selectedType');
           setIsLoading(false);
         }, (error: any) => {
           alert('Cannot log out. Please try again');

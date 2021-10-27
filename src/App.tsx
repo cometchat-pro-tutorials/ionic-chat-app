@@ -100,6 +100,12 @@ const App: React.FC<any> = () => {
         onGroupMemberKicked: (message: any, kickedUser: any, kickedBy: any, kickedFrom: any) => {
           alert(`${kickedUser.name} was removed from ${kickedFrom.name}`);
         },
+        onGroupMemberLeft: (message: any, leavingUser: any, group: any) => {
+          alert(`${leavingUser.name} has left the group ${group.name}`);
+        },
+        onGroupMemberJoined: (message: any, joinedUser: any, joinedGroup: any) => {
+          alert(`${joinedUser.name} has joined the group ${joinedGroup.name}`);
+        }
       })
     );
   };

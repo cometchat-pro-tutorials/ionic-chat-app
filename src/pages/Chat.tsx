@@ -71,6 +71,18 @@ const Chat: React.FC = () => {
     }
   }
 
+  const updateDeliveredAt = (messageReceipt: any) => {
+    setMessages((prevMessages: any) => {
+      return prevMessages.map((message: any) => {
+        if (!message.deliveredAt && messageReceipt.sender.uid === selectedConversation.uid) {
+          message.deliveredAt = messageReceipt.deliveredAt;
+          return message;
+        }
+        return message;
+      });
+    })
+  }
+
   const updateReadAt = (messageReceipt: any) => {
     setMessages((prevMessages: any) => {
       return prevMessages.map((message: any) => {
@@ -133,6 +145,9 @@ const Chat: React.FC = () => {
           typingRef.current.classList.add('hide');
         },
         onMessagesDelivered: (messageReceipt: any) => {
+          if (selectedConversation.contactType === 0) {
+            updateDeliveredAt(messageReceipt);
+          }
         },
         onMessagesRead: (messageReceipt: any) => {
           if (selectedConversation.contactType === 0) {
@@ -438,11 +453,11 @@ const Chat: React.FC = () => {
               <IonIcon slot="icon-only" icon={videocamOutline} />
             </IonButton>
           </IonButtons>
-          {selectedConversation && selectedConversation.guid && selectedConversation.owner === user.uid && <IonButtons slot="end">
+          <IonButtons slot="end">
             <IonButton onClick={goToManageGroup} >
               <IonIcon slot="icon-only" icon={settings} />
             </IonButton>
-          </IonButtons>}
+          </IonButtons>
           <div className='chatbox__title'>
             <div className='chatbox__title-avatar-container'>
               <img src={selectedConversation?.avatar ? selectedConversation?.avatar : selectedConversation?.icon ? selectedConversation?.icon : ''} alt={selectedConversation?.name} />
