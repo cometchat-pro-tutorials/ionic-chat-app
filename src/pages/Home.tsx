@@ -38,10 +38,12 @@ const Home: React.FC = () => {
   }, [cometChat, selectedType]);
 
   useEffect(() => {
-    if (selectedType === 0) {
-      searchUsers();
-    } else {
-      searchGroups();
+    if (cometChat) {
+      if (selectedType === 0) {
+        searchUsers();
+      } else {
+        searchGroups();
+      }
     }
     return () => {
       setData(null);
