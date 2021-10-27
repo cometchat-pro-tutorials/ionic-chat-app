@@ -210,7 +210,6 @@ const Home: React.FC = () => {
     if (item && item.guid && !item.hasJoined) {
       joinGroup(item);
     }
-    console.log(item);
     setSelectedConversation({ ...item, contactType: selectedType });
     history.push('/chat');
   };
