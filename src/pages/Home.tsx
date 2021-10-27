@@ -86,7 +86,7 @@ const Home: React.FC = () => {
     if (receiverType === 'group') {
       return textMessage.receiverId;
     } else if (receiverType === 'user') {
-      return textMessage.sender.id; 
+      return textMessage.sender.uid; 
     }
     return null;
   };
@@ -133,14 +133,17 @@ const Home: React.FC = () => {
 
   const searchUsers = () => {
     if (cometChat) {
+      setIsLoading(true);
       const limit = 30;
       const usersRequestBuilder = new cometChat.UsersRequestBuilder().setLimit(limit);
       const usersRequest = keyword ? usersRequestBuilder.setSearchKeyword(keyword).build() : usersRequestBuilder.build();
       usersRequest.fetchNext().then(
         (userList: any) => {
           getUnreadMessageCountForAllUsers(userList);
+          setIsLoading(false);
         },
         (error: any) => {
+          setIsLoading(false);
         }
       );
     }
@@ -210,6 +213,7 @@ const Home: React.FC = () => {
     if (item && item.guid && !item.hasJoined) {
       joinGroup(item);
     }
+    console.log(item);
     setSelectedConversation({ ...item, contactType: selectedType });
     history.push('/chat');
   };
