@@ -12,10 +12,6 @@ const ManageGroup: React.FC = () => {
 
   const { user, cometChat, setIsLoading, selectedConversation } = useContext(Context);
 
-  useEffect(() => {
-    console.log(selectedConversation);
-  }, []);
-
   const handleDeleteGroup = () => {
     if (selectedConversation && selectedConversation.name && selectedConversation.guid) {
       setIsLoading(true);
