@@ -41,7 +41,7 @@ const Home: React.FC = () => {
     if (cometChat) {
       if (selectedType === 0) {
         searchUsers();
-      } else {
+      } else if (selectedType === 1) {
         searchGroups();
       }
     }
@@ -81,19 +81,19 @@ const Home: React.FC = () => {
     }
   }
 
-  const getUnreadUpdatedId = (textMessage: any) => {
-    const receiverType = textMessage.receiverType;
+  const getUnreadUpdatedId = (message: any) => {
+    const receiverType = message.receiverType;
     if (receiverType === 'group') {
-      return textMessage.receiverId;
+      return message.receiverId;
     } else if (receiverType === 'user') {
-      return textMessage.sender.uid; 
+      return message.sender.uid; 
     }
     return null;
   };
 
-  const markAsDelivered = (textMessage: any) => {
-    if (textMessage) {
-      cometChat.markAsDelivered(textMessage);
+  const markAsDelivered = (message: any) => {
+    if (message) {
+      cometChat.markAsDelivered(message);
     }
   };
 
@@ -109,7 +109,16 @@ const Home: React.FC = () => {
               updateUnreadCountMessage(updatedId);
             }
           }
-        }
+        },
+        onMediaMessageReceived: (mediaMessage: any) => {
+          if (mediaMessage) {
+            markAsDelivered(mediaMessage);
+            const updatedId = getUnreadUpdatedId(mediaMessage);
+            if (updatedId) {
+              updateUnreadCountMessage(updatedId);
+            }
+          }
+        },
       })
     );
   }, [cometChat, selectedType]);
@@ -226,6 +235,7 @@ const Home: React.FC = () => {
         () => {
           setUser(null);
           setSelectedConversation(null);
+          setSelectedType(0);
           localStorage.removeItem('auth');
           localStorage.removeItem('selectedType');
           setIsLoading(false);
