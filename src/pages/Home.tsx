@@ -133,17 +133,14 @@ const Home: React.FC = () => {
 
   const searchUsers = () => {
     if (cometChat) {
-      setIsLoading(true);
       const limit = 30;
       const usersRequestBuilder = new cometChat.UsersRequestBuilder().setLimit(limit);
       const usersRequest = keyword ? usersRequestBuilder.setSearchKeyword(keyword).build() : usersRequestBuilder.build();
       usersRequest.fetchNext().then(
         (userList: any) => {
           getUnreadMessageCountForAllUsers(userList);
-          setIsLoading(false);
         },
         (error: any) => {
-          setIsLoading(false);
         }
       );
     }
