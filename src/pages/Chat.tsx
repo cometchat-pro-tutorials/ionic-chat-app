@@ -453,11 +453,11 @@ const Chat: React.FC = () => {
               <IonIcon slot="icon-only" icon={videocamOutline} />
             </IonButton>
           </IonButtons>
-          <IonButtons slot="end">
+          {selectedConversation && selectedConversation.contactType === 1 && <IonButtons slot="end">
             <IonButton onClick={goToManageGroup} >
               <IonIcon slot="icon-only" icon={settings} />
             </IonButton>
-          </IonButtons>
+          </IonButtons>}
           <div className='chatbox__title'>
             <div className='chatbox__title-avatar-container'>
               <img src={selectedConversation?.avatar ? selectedConversation?.avatar : selectedConversation?.icon ? selectedConversation?.icon : ''} alt={selectedConversation?.name} />
