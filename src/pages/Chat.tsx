@@ -107,6 +107,16 @@ const Chat: React.FC = () => {
     setIsUserOnline(false);
   }
 
+  const isTypingStatusChanged = (typingIndicator: any) => {
+    if (selectedConversation.contactType === 0 && typingIndicator.receiverId === selectedConversation.uid) {
+      return true;
+    }
+    if (selectedConversation.contactType === 1 && typingIndicator.receiverId === selectedConversation.guid) {
+      return true;
+    }
+    return false;
+  }
+
   const listenForMessages = () => {
     cometChat.addMessageListener(
       selectedConversation.uid,
@@ -136,13 +146,17 @@ const Chat: React.FC = () => {
           scrollToBottom();
         },
         onTypingStarted: (typingIndicator: any) => {
-          typingRef.current.classList.remove('hide');
-          typingRef.current.classList.add('show');
-          typingRef.current.innerHTML = `${typingIndicator.sender.name} is typing...`;
+          if (isTypingStatusChanged(typingIndicator)) {
+            typingRef.current.classList.remove('hide');
+            typingRef.current.classList.add('show');
+            typingRef.current.innerHTML = `${typingIndicator.sender.name} is typing...`;
+          }
         },
         onTypingEnded: (typingIndicator: any) => {
-          typingRef.current.classList.remove('show');
-          typingRef.current.classList.add('hide');
+          if (isTypingStatusChanged(typingIndicator)) {
+            typingRef.current.classList.remove('show');
+            typingRef.current.classList.add('hide');
+          }
         },
         onMessagesDelivered: (messageReceipt: any) => {
           if (selectedConversation.contactType === 0) {
