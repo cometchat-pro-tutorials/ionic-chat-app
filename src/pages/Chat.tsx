@@ -108,10 +108,20 @@ const Chat: React.FC = () => {
   }
 
   const isTypingStatusChanged = (typingIndicator: any) => {
-    if (selectedConversation.contactType === 0 && typingIndicator.receiverId === selectedConversation.uid) {
+    if (typingIndicator.receiverType === 'user' && typingIndicator.sender.uid === selectedConversation.uid) {
       return true;
     }
-    if (selectedConversation.contactType === 1 && typingIndicator.receiverId === selectedConversation.guid) {
+    if (typingIndicator.receiverType === 'group' && typingIndicator.receiverId === selectedConversation.guid) {
+      return true;
+    }
+    return false;
+  }
+
+  const shouldRenderMessage = (message: any) => {
+    if (message.receiverType === 'user' && message.sender.uid === selectedConversation.uid) {
+      return true;
+    }
+    if (message.receiverType === 'group' && message.receiverId === selectedConversation.guid) {
       return true;
     }
     return false;
@@ -122,28 +132,32 @@ const Chat: React.FC = () => {
       selectedConversation.uid,
       new cometChat.MessageListener({
         onTextMessageReceived: (message: any) => {
-          // set state.
-          setMessages((prevMessages: any) => [...prevMessages, message]);
-          sendReadBulkReceipts([message]);
-          scrollToBottom();
+          if (shouldRenderMessage(message)) {
+            // set state.
+            setMessages((prevMessages: any) => [...prevMessages, message]);
+            sendReadBulkReceipts([message]);
+            scrollToBottom();
+          }
         },
         onMediaMessageReceived: (mediaMessage: any) => {
           // Handle media message
-          const messageContent = getContentMessage(mediaMessage);
-          setMessages((prevMessages: any) => [...prevMessages, {
-            id: mediaMessage.id,
-            text: messageContent,
-            receiverId: mediaMessage.receiverId,
-            sender: {
-              uid: mediaMessage.sender.uid,
-              avatar: mediaMessage.sender.avatar ? mediaMessage.sender.avatar : user.avatar
-            },
-            type: mediaMessage.type,
-            deliveredAt: mediaMessage.deliveredAt,
-            readAt: mediaMessage.readAt
-          }]);
-          sendReadBulkReceipts([mediaMessage]);
-          scrollToBottom();
+          if (shouldRenderMessage(mediaMessage)) {
+            const messageContent = getContentMessage(mediaMessage);
+            setMessages((prevMessages: any) => [...prevMessages, {
+              id: mediaMessage.id,
+              text: messageContent,
+              receiverId: mediaMessage.receiverId,
+              sender: {
+                uid: mediaMessage.sender.uid,
+                avatar: mediaMessage.sender.avatar ? mediaMessage.sender.avatar : user.avatar
+              },
+              type: mediaMessage.type,
+              deliveredAt: mediaMessage.deliveredAt,
+              readAt: mediaMessage.readAt
+            }]);
+            sendReadBulkReceipts([mediaMessage]);
+            scrollToBottom();
+          }
         },
         onTypingStarted: (typingIndicator: any) => {
           if (isTypingStatusChanged(typingIndicator)) {
